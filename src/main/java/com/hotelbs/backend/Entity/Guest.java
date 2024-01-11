@@ -1,11 +1,15 @@
-package com.hotelbs.backend.Model;
+package com.hotelbs.backend.Entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-
+@Getter
+@Setter
 @Entity
+@NoArgsConstructor
 public class Guest {
 
     @Id
@@ -18,4 +22,6 @@ public class Guest {
     private String email;
     private LocalDateTime created;
     private LocalDateTime updated;
+
+
 }

@@ -1,11 +1,16 @@
-package com.hotelbs.backend.Model;
+package com.hotelbs.backend.Entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-
+@Getter
+@Setter
 @Entity
+@NoArgsConstructor
 public class Reservation {
 
     @Id
