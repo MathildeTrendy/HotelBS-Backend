@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -17,6 +18,22 @@ public class HotelController {
 
     @Autowired
     private HotelService hotelService;
+
+    @GetMapping()
+    public List<HotelWithRoomCountDTO> getHotels() {
+        return hotelService.getHotelsWithRoomCounts();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getHotelById(@PathVariable int id) {
+        try {
+            return ResponseEntity.ok(
+                    hotelService.getHotelWithRoomCount(id)
+            );
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @PostMapping() // Same as calling POST /api/hotels
     public Hotel create(
@@ -29,16 +46,18 @@ public class HotelController {
         return hotelService.create(name, street, city, country, zip);
     }
 
-    @GetMapping()
-    public List<HotelWithRoomCountDTO> getHotels() {
-        return hotelService.getHotelsWithRoomCounts();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> getHotelById(@PathVariable int id) {
+    @PutMapping("/{id}") // Same as calling PUT /api/hotels/{id}
+    public ResponseEntity<Object> update(
+            @PathVariable int id,
+            @RequestParam(required = false) Optional<String> name,
+            @RequestParam(required = false) Optional<String> street,
+            @RequestParam(required = false) Optional<String> city,
+            @RequestParam(required = false) Optional<String> country,
+            @RequestParam(required = false) Optional<String> zip
+    ) {
         try {
             return ResponseEntity.ok(
-                hotelService.getHotelWithRoomCount(id)
+                hotelService.update(id, name, street, city, country, zip)
             );
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

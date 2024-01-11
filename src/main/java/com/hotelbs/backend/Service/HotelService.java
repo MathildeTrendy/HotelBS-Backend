@@ -22,18 +22,6 @@ public class HotelService {
     @Autowired
     private RoomRepo roomRepo;
 
-    public Hotel create(String name, String street, String city, String country, String zip) {
-        Hotel hotelSet = new Hotel();
-        hotelSet.setName(name);
-        hotelSet.setStreet(street);
-        hotelSet.setCity(city);
-        hotelSet.setCountry(country);
-        hotelSet.setZip(zip);
-        hotelSet.setCreated(LocalDateTime.now());
-        hotelSet.setUpdated(LocalDateTime.now());
-       return hotelRepo.save(hotelSet);
-    }
-
     public List<Hotel> getHotels() {
         return hotelRepo.findAll();
     }
@@ -60,5 +48,45 @@ public class HotelService {
 
         int roomCount = roomRepo.countByHotelId(hotel.get().getId());
         return new HotelWithRoomCountDTO(hotel.get(), roomCount);
+    }
+
+    public Hotel create(String name, String street, String city, String country, String zip) {
+        Hotel hotelSet = new Hotel();
+        hotelSet.setName(name);
+        hotelSet.setStreet(street);
+        hotelSet.setCity(city);
+        hotelSet.setCountry(country);
+        hotelSet.setZip(zip);
+        hotelSet.setCreated(LocalDateTime.now());
+        hotelSet.setUpdated(LocalDateTime.now());
+       return hotelRepo.save(hotelSet);
+    }
+
+    public Hotel update(
+            int id,
+            Optional<String> name,
+            Optional<String> street,
+            Optional<String> city,
+            Optional<String> country,
+            Optional<String> zip
+    ) {
+        Optional<Hotel> optionalHotel = hotelRepo.findById(id);
+
+        // Check if hotel exists, if not -> Error
+        if (optionalHotel.isEmpty()) {
+            throw new EntityNotFoundException("No hotel found with Id: " + id);
+        }
+
+        // Since we know the hotel exists, we can drop the Optional wrapper.
+        Hotel hotel = optionalHotel.get();
+
+        // Now update each value if present in the input
+        name.ifPresent(hotel::setName);
+        street.ifPresent(hotel::setStreet);
+        city.ifPresent(hotel::setCity);
+        country.ifPresent(hotel::setCountry);
+        zip.ifPresent(hotel::setZip);
+
+        return hotelRepo.save(hotel);
     }
 }
