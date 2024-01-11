@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.LocalDateTime;
 
 @Getter
@@ -26,6 +25,4 @@ public class Hotel {
     private String zip;
     private LocalDateTime created;
     private LocalDateTime updated;
-
-
 }

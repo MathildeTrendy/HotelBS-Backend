@@ -23,7 +23,7 @@ public class Room {
     private LocalDateTime updated;
 
     @ManyToOne
-    @JoinColumn(name = "hotel", referencedColumnName = "id")
+    @JoinColumn(name = "hotel_id", referencedColumnName = "id")
     Hotel hotel;
 
 }

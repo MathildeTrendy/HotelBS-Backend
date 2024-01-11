@@ -21,11 +21,11 @@ public class Reservation {
     private LocalDateTime updated;
 
     @ManyToOne
-    @JoinColumn(name = "room", referencedColumnName = "id")
+    @JoinColumn(name = "room_id", referencedColumnName = "id")
     Room room;
 
 
     @ManyToOne
-    @JoinColumn(name = "guest", referencedColumnName = "id")
+    @JoinColumn(name = "guest_id", referencedColumnName = "id")
     Guest guest;
 }
