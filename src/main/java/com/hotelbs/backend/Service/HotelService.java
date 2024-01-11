@@ -53,6 +53,7 @@ public class HotelService {
     public HotelWithRoomCountDTO getHotelWithRoomCount(int id) {
         Optional<Hotel> hotel = hotelRepo.findById(id);
 
+        // Check if hotel exists, if not -> Error
         if (hotel.isEmpty()) {
             throw new EntityNotFoundException("No hotel found with Id: " + id);
         }

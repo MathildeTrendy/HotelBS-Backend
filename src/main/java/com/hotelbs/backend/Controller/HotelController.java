@@ -3,7 +3,9 @@ package com.hotelbs.backend.Controller;
 import com.hotelbs.backend.DTO.HotelWithRoomCountDTO;
 import com.hotelbs.backend.Entity.Hotel;
 import com.hotelbs.backend.Service.HotelService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +35,13 @@ public class HotelController {
     }
 
     @GetMapping("/{id}")
-    public HotelWithRoomCountDTO getHotelById(@PathVariable int id) {
-        return hotelService.getHotelWithRoomCount(id);
+    public ResponseEntity<Object> getHotelById(@PathVariable int id) {
+        try {
+            return ResponseEntity.ok(
+                hotelService.getHotelWithRoomCount(id)
+            );
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
