@@ -28,7 +28,18 @@ public class HotelController {
     public ResponseEntity<Object> getHotelById(@PathVariable int id) {
         try {
             return ResponseEntity.ok(
-                    hotelService.getHotelWithRoomCount(id)
+                    hotelService.getHotelById(id)
+            );
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/all/{id}")
+    public ResponseEntity<Object> getAllHotelDetailsById(@PathVariable int id) {
+        try {
+            return ResponseEntity.ok(
+                    hotelService.getAllHotelDetailsById(id)
             );
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -58,6 +69,17 @@ public class HotelController {
         try {
             return ResponseEntity.ok(
                 hotelService.update(id, name, street, city, country, zip)
+            );
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteHotel(@PathVariable int id) {
+        try {
+            return ResponseEntity.ok(
+                hotelService.deleteHotel(id)
             );
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

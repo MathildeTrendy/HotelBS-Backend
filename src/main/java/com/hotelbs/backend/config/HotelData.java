@@ -50,7 +50,7 @@ public class HotelData implements CommandLineRunner {
             for (int j = 1; j <= faker.random().nextInt(10, 40); j++) {
                 // Create a Room
                 Room roomSet = new Room();
-                roomSet.setRoomNumber(String.valueOf(j));
+                roomSet.setRoomNumber(j); // Use index j as the room number
 
                 // For each room, add between 1 and 4 beds randomly
                 roomSet.setNumberOfBeds(faker.random().nextInt(1, 4));

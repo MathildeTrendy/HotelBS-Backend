@@ -2,6 +2,7 @@ package com.hotelbs.backend.Service;
 
 import com.hotelbs.backend.DTO.HotelWithRoomCountDTO;
 import com.hotelbs.backend.Entity.Hotel;
+import com.hotelbs.backend.Entity.Room;
 import com.hotelbs.backend.Repository.HotelRepo;
 import com.hotelbs.backend.Repository.RoomRepo;
 import jakarta.persistence.EntityNotFoundException;
@@ -38,16 +39,27 @@ public class HotelService {
                 .collect(Collectors.toList());
     }
 
-    public HotelWithRoomCountDTO getHotelWithRoomCount(int id) {
+    public HotelWithRoomCountDTO getHotelById(int id) {
         Optional<Hotel> hotel = hotelRepo.findById(id);
 
-        // Check if hotel exists, if not -> Error
+        // Check if hotel exists, if not -> Error (checking
         if (hotel.isEmpty()) {
             throw new EntityNotFoundException("No hotel found with Id: " + id);
         }
 
         int roomCount = roomRepo.countByHotelId(hotel.get().getId());
         return new HotelWithRoomCountDTO(hotel.get(), roomCount);
+    }
+
+    public Hotel getAllHotelDetailsById(int id) {
+        Optional<Hotel> hotel = hotelRepo.findById(id);
+
+        // Check if hotel exists, if not -> Error (checking
+        if (hotel.isEmpty()) {
+            throw new EntityNotFoundException("No hotel found with Id: " + id);
+        }
+
+        return hotel.get();
     }
 
     public Hotel create(String name, String street, String city, String country, String zip) {
@@ -63,12 +75,12 @@ public class HotelService {
     }
 
     public Hotel update(
-            int id,
-            Optional<String> name,
-            Optional<String> street,
-            Optional<String> city,
-            Optional<String> country,
-            Optional<String> zip
+        int id,
+        Optional<String> name,
+        Optional<String> street,
+        Optional<String> city,
+        Optional<String> country,
+        Optional<String> zip
     ) {
         Optional<Hotel> optionalHotel = hotelRepo.findById(id);
 
@@ -88,5 +100,23 @@ public class HotelService {
         zip.ifPresent(hotel::setZip);
 
         return hotelRepo.save(hotel);
+    }
+
+    public Boolean deleteHotel(int id) {
+        Optional<Hotel> hotel = hotelRepo.findById(id);
+
+        // Check if hotel exists, if not -> Error
+        if (hotel.isEmpty()) {
+            throw new EntityNotFoundException("No hotel found with Id: " + id);
+        }
+
+        // First we delete all rooms, due to a foreign key constraint
+        List<Room> rooms = roomRepo.findByHotelId(id);
+        roomRepo.deleteAll(rooms);
+
+        // Then we delete the hotel
+        hotelRepo.delete(hotel.get());
+
+        return true;
     }
 }

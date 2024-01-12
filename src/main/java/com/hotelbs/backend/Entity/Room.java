@@ -17,7 +17,7 @@ public class Room {
     @Column(length = 4)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String roomNumber;
+    private int roomNumber;
     private int numberOfBeds;
     private LocalDateTime created;
     private LocalDateTime updated;
